@@ -1,11 +1,11 @@
-home_team,away_team,home_score,away_score,target_column
-Flamengo,Palmeiras,2,1,1
-Corinthians,Santos,1,1,0
-Gremio,Internacional,0,2,2
-Sao Paulo,Botafogo,3,1,1
-Fluminense,Vasco,2,2,0
-Cruzeiro,Atletico-MG,1,0,1
-Fortaleza,Bahia,2,1,1
-Cuiaba,Bragantino,0,0,0
-Athletico-PR,Curitiba,2,0,1
-Goias,America-MG,1,1,0
+home_score,away_score,target_column
+2,1,1
+1,1,0
+0,2,2
+3,1,1
+2,2,0
+1,0,1
+2,1,1
+0,0,0
+2,0,1
+1,1,0
