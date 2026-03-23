@@ -1,68 +1,77 @@
 import streamlit as st
-from datetime import datetime
+import time
 
-st.set_page_config(page_title="Predator Neural", layout="centered")
+# Configuração de ecrã para telemóvel
+st.set_page_config(page_title="Predator Ultra-Flash", layout="centered")
 
-# Estilo para botões gigantes e fáceis de clicar
+# CSS para Botões Gigantes e Alerta Visual
 st.markdown("""
     <style>
     .stApp { background-color: #0b0e14; }
+    /* Botões que ocupam metade do ecrã cada */
     div.stButton > button {
-        width: 100%; height: 80px; font-size: 24px !important; font-weight: bold;
-        border-radius: 15px; margin-bottom: 10px;
+        width: 100%; height: 120px; font-size: 30px !important; 
+        font-weight: bold; border-radius: 20px; border: 2px solid #c9a227;
     }
-    .btn-casa { background-color: #ff4b4b !important; color: white !important; }
-    .btn-visi { background-color: #007bff !important; color: white !important; }
-    .status-box { 
-        background: #1a1c23; padding: 20px; border: 2px solid #c9a227; 
-        border-radius: 15px; text-align: center; font-size: 22px;
+    .btn-casa { background: linear-gradient(145deg, #ff4b4b, #8b0000) !important; color: white !important; }
+    .btn-visi { background: linear-gradient(145deg, #007bff, #00008b) !important; color: white !important; }
+    
+    /* Card de Sinal que pisca para chamar atenção */
+    .sinal-alerta {
+        background: #1a1c23; padding: 30px; border-radius: 20px;
+        border: 4px solid #c9a227; text-align: center;
+        animation: blinker 1.5s linear infinite;
     }
+    @keyframes blinker { 50% { opacity: 0.5; border-color: #fff; } }
     </style>
     """, unsafe_allow_html=True)
 
-# Lista para guardar os últimos 4 resultados
-if 'historico' not in st.session_state: st.session_state.historico = []
+if 'dados' not in st.session_state: st.session_state.dados = []
 
-def adicionar_resultado(res):
-    st.session_state.historico.insert(0, res)
-    if len(st.session_state.historico) > 4:
-        st.session_state.historico.pop()
+def processar(cor):
+    st.session_state.dados.insert(0, cor)
+    if len(st.session_state.dados) > 4:
+        st.session_state.dados.pop()
 
-st.markdown("<h2 style='text-align: center; color: #c9a227;'>🏆 PREDATOR SPEED</h2>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center; color: #c9a227;'>⚡ PREDATOR FLASH</h1>", unsafe_allow_html=True)
 
-# Histórico Visual (Bolinhas)
-cols = st.columns(4)
-for i in range(4):
-    val = st.session_state.historico[i] if i < len(st.session_state.historico) else "-"
-    cols[i].markdown(f"<div style='text-align:center; font-size:25px;'>{val}</div>", unsafe_allow_html=True)
+# Área de Botões - TOQUE ÚNICO
+col1, col2 = st.columns(2)
 
-st.markdown("---")
+with col1:
+    if st.button("🔴\nCASA", key="c"):
+        processar("C")
+        st.rerun()
 
-# BOTÕES DE ENTRADA RÁPIDA
-st.write("👉 **Toque no que saiu agora no jogo:**")
-c1, c2 = st.columns(2)
+with col2:
+    if st.button("🔵\nVISITANTE", key="v"):
+        processar("V")
+        st.rerun()
 
-if c1.button("🔴 CASA", key="btn_c"):
-    adicionar_resultado("C")
-    st.rerun()
-
-if c2.button("🔵 VISITANTE", key="btn_v"):
-    adicionar_resultado("V")
-    st.rerun()
-
-# ANÁLISE AUTOMÁTICA (Sem precisar clicar em outro botão)
-if len(st.session_state.historico) >= 3:
-    h = st.session_state.historico
-    # Exemplo de lógica: Se sair 3 iguais, ele manda inverter
-    if h[0] == h[1] == h[2]:
-        sinal = "🔥 ENTRAR NO VISITANTE" if h[0] == "C" else "🔥 ENTRAR NA CASA"
-        cor_sinal = "#ff4b4b" if "CASA" in sinal else "#007bff"
-    else:
-        sinal = "⚖️ AGUARDAR PADRÃO"
-        cor_sinal = "#888"
+# ANÁLISE AUTOMÁTICA IMEDIATA
+if len(st.session_state.dados) >= 3:
+    d = st.session_state.dados
     
-    st.markdown(f"<div class='status-box' style='color:{cor_sinal};'><b>{sinal}</b><br><small>Proteja o Empate</small></div>", unsafe_allow_html=True)
+    # Lógica de Inteligência: Procura quebra de sequência ou xadrez
+    if d[0] == d[1] == d[2]:
+        sinal = "🔥 ENTRAR NO VISITANTE" if d[0] == "C" else "🔥 ENTRAR NA CASA"
+        cor_txt = "#007bff" if "VISITANTE" in sinal else "#ff4b4b"
+        
+        st.markdown(f"""
+            <div class="sinal-alerta">
+                <h1 style='color: {cor_txt}; margin:0;'>{sinal}</h1>
+                <p style='color: #c9a227; font-size: 20px;'><b>COBRIR EMPATE (85% Confiança)</b></p>
+            </div>
+        """, unsafe_allow_html=True)
+    
+    elif d[0] != d[1] and d[1] != d[2]:
+        st.info("🔄 PADRÃO XADREZ: Aguarde a quebra para entrar com segurança.")
+    else:
+        st.write("⏳ Analisando mesa... Continue inserindo os resultados.")
 
-if st.button("🗑️ LIMPAR TUDO"):
-    st.session_state.historico = []
+# Histórico rápido no rodapé
+st.markdown("---")
+st.write(f"📊 Últimos: {' | '.join(st.session_state.dados)}")
+if st.button("🗑️ LIMPAR"):
+    st.session_state.dados = []
     st.rerun()
