@@ -1,15 +1,16 @@
 import streamlit as st
 import time
 
-st.set_page_config(page_title="Predator Studio AI", layout="centered")
+# Configurações de Design Premium
+st.set_page_config(page_title="Predator Studio Pro", layout="centered")
 
-# Estilo Dark Gold Premium
 st.markdown("""
     <style>
     .stApp { background-color: #0b0e14; color: white; }
     .resultado-box { 
         background: #1a1c23; padding: 25px; border-radius: 15px; 
         text-align: center; border: 2px solid #c9a227; margin-top: 20px;
+        box-shadow: 0px 0px 15px rgba(201, 162, 39, 0.3);
     }
     .stButton>button { 
         background: linear-gradient(90deg, #c9a227, #8e6d13);
@@ -22,59 +23,54 @@ if 'greens' not in st.session_state: st.session_state.greens = 0
 if 'reds' not in st.session_state: st.session_state.reds = 0
 
 def main():
-    st.markdown("<h1 style='text-align: center; color: #c9a227;'>🏆 PREDATOR FOOTBALL STUDIO</h1>", unsafe_allow_html=True)
+    st.markdown("<h1 style='text-align: center; color: #c9a227;'>🏆 PREDATOR NEURAL STUDIO</h1>", unsafe_allow_html=True)
     
-    # Placar Superior
+    # Painel de Lucro Real
     c1, c2 = st.columns(2)
-    c1.metric("✅ GREENS", st.session_state.greens)
-    c2.metric("❌ REDS", st.session_state.reds)
+    c1.metric("✅ ACERTOS (GREEN)", st.session_state.greens)
+    c2.metric("❌ ERROS (RED)", st.session_state.reds)
 
     st.markdown("---")
-    st.markdown("### 📊 Histórico da Mesa (C ou V):")
+    st.markdown("### 🔍 Alimentar Histórico (C ou V):")
     col1, col2, col3, col4 = st.columns(4)
-    r1 = col1.text_input("Último", "C").upper()
-    r2 = col2.text_input("Penúlt.", "V").upper()
-    r3 = col3.text_input("Antep.", "C").upper()
-    r4 = col4.text_input("4º Atrás", "V").upper()
+    r1 = col1.text_input("1º Ant.", "C").upper()
+    r2 = col2.text_input("2º Ant.", "V").upper()
+    r3 = col3.text_input("3º Ant.", "C").upper()
+    r4 = col4.text_input("4º Ant.", "V").upper()
 
-    if st.button("🔍 GERAR SINAL DE ENTRADA"):
-        with st.status("🧠 IA Analisando Algoritmos...", expanded=False):
-            time.sleep(1)
+    if st.button("🔥 ANALISAR PROBABILIDADES"):
+        with st.spinner('Escaneando padrões de cartas...'):
+            time.sleep(1.2)
         
-        # LÓGICA DE INTELIGÊNCIA DE PADRÕES:
-        historico = [r1, r2, r3, r4]
-        
-        # 1. Identifica Sequência (Surf)
-        if r1 == r2 == r3:
+        # Lógica Neural de Ciclos
+        if r1 == r2 == r3: # Identifica tentativa de quebra de sequência longa
             sinal, cor = f"🔴 ENTRAR NO {'CASA' if r1 == 'V' else 'VISITANTE'}", "#ff4b4b"
-            msg = "⚠️ Alerta de Quebra de Sequência!"
-        # 2. Identifica Alternância (Xadrez)
-        elif r1 != r2 and r2 != r3 and r3 != r4:
+            aviso = "🚨 ALERTA: Possível quebra de sequência detectada!"
+        elif r1 != r2 and r2 != r3: # Identifica padrão de alternância (Xadrez)
             sinal, cor = f"🔵 ENTRAR NO {r1}", "#007bff"
-            msg = "⚡ Seguindo o fluxo de Xadrez"
-        # 3. Padrão de Repetição Dupla
-        elif r1 == r2 and r3 == r4:
+            aviso = "⚡ PADRÃO: Seguindo fluxo de alternância (Xadrez)."
+        elif r1 == r2 and r3 == r4: # Padrão de repetição em duplas (2-2)
             sinal, cor = f"🔴 ENTRAR NO {'VISITANTE' if r1 == 'C' else 'CASA'}", "#ff4b4b"
-            msg = "🎯 Padrão 2-2 Detectado"
+            aviso = "🎯 ALVO: Inversão de padrão 2-2 confirmada."
         else:
-            sinal, cor = "⚖️ AGUARDAR CONFIRMAÇÃO", "#888"
-            msg = "Mesa sem padrão claro no momento."
+            sinal, cor = "⚖️ AGUARDAR MESA", "#888"
+            aviso = "Mesa sem padrão estatístico claro. Não entre agora."
 
         st.markdown(f"""
             <div class="resultado-box">
-                <h1 style='color: {cor};'>{sinal}</h1>
-                <p style='color: #c9a227;'>{msg}</p>
-                <p style='font-size: 12px;'>Proteção no Empate | Até Gale 1</p>
+                <h1 style='color: {cor}; font-size: 38px;'>{sinal}</h1>
+                <p style='color: #c9a227; font-size: 18px;'>{aviso}</p>
+                <p style='font-size: 14px; color: #aaa;'>Cobrir EMPATE | Gestão: Até Gale 1</p>
             </div>
         """, unsafe_allow_html=True)
 
     st.markdown("---")
-    st.write("🏁 **Resultado da última entrada:**")
+    st.write("📊 **Confirmar resultado da entrada:**")
     bc1, bc2 = st.columns(2)
-    if bc1.button("✅ BATEU"):
+    if bc1.button("✅ GREEN"):
         st.session_state.greens += 1
         st.rerun()
-    if bc2.button("❌ ERROU"):
+    if bc2.button("❌ RED"):
         st.session_state.reds += 1
         st.rerun()
 
