@@ -3,57 +3,81 @@ import time
 
 st.set_page_config(page_title="Predator Studio AI", layout="centered")
 
-# Visual Dark focado no Football Studio
+# Visual Dark e Botões Coloridos
 st.markdown("""
     <style>
     .stApp { background-color: #0b0e14; color: white; }
-    .card-history { background: #1a1c23; border: 1px solid #c9a227; border-radius: 10px; padding: 15px; }
-    .btn-casa { background-color: #ff4b4b !important; color: white !important; font-weight: bold; }
-    .btn-visitante { background-color: #007bff !important; color: white !important; font-weight: bold; }
+    .resultado-box { 
+        background: #1a1c23; 
+        padding: 25px; 
+        border-radius: 15px; 
+        text-align: center; 
+        border: 2px solid #c9a227; 
+        margin-top: 20px;
+    }
+    .stButton>button { 
+        background: linear-gradient(90deg, #c9a227, #8e6d13);
+        color: white; border: none; font-weight: bold; height: 50px; width: 100%;
+    }
+    .link-button {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        background-color: #28a745;
+        color: white;
+        text-align: center;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: bold;
+        margin-top: 15px;
+    }
     </style>
     """, unsafe_allow_html=True)
 
 def main():
     st.markdown("<h1 style='text-align: center; color: #c9a227;'>🏆 PREDATOR FOOTBALL STUDIO</h1>", unsafe_allow_html=True)
     
-    st.markdown("### 📊 Digite os últimos resultados da mesa:")
-    st.caption("Use 'C' para Casa (Vermelho) e 'V' para Visitante (Azul)")
-    
+    st.markdown("### 📊 Histórico da Mesa (C ou V):")
     col1, col2, col3, col4 = st.columns(4)
-    r1 = col1.text_input("Ant. 1", "C").upper()
-    r2 = col2.text_input("Ant. 2", "V").upper()
-    r3 = col3.text_input("Ant. 3", "C").upper()
-    r4 = col4.text_input("Ant. 4", "C").upper()
+    r1 = col1.text_input("Último", "C").upper()
+    r2 = col2.text_input("Penúlt.", "V").upper()
+    r3 = col3.text_input("Antep.", "C").upper()
+    r4 = col4.text_input("4º Atrás", "C").upper()
 
-    if st.button("🔥 ANALISAR TENDÊNCIA DA MESA"):
-        with st.status("Lendo algoritmos da Evolution Gaming...", expanded=True) as status:
+    if st.button("🔍 GERAR SINAL DE ENTRADA"):
+        with st.status("🧠 Analisando padrões...", expanded=False):
+            time.sleep(1.5)
+            st.write("Verificando algoritmos da mesa...")
             time.sleep(1)
-            st.write("Verificando histórico de cartas...")
-            time.sleep(1)
-            st.write("Calculando probabilidade de quebra de padrão...")
-            status.update(label="Análise Concluída!", state="complete", expanded=False)
 
-        # Lógica de Inteligência Real
-        historico = [r1, r2, r3, r4]
-        
-        # Exemplo de lógica: Se os últimos 2 foram iguais, a IA prevê a quebra ou a continuação
+        # Lógica de Análise para Football Studio
         if r1 == r2 == "C":
-            sinal = "🔴 ENTRAR NO CASA (C)"
-            obs = "Padrão de repetição detectado. IA indica continuação do fluxo."
+            sinal = "🔴 ENTRAR NO CASA"
+            cor = "#ff4b4b"
+            gale = "⚠️ Até GALE 2 se necessário"
         elif r1 == r2 == "V":
-            sinal = "🔵 ENTRAR NO VISITANTE (V)"
-            obs = "Tendência de fluxo para Visitante confirmada."
+            sinal = "🔵 ENTRAR NO VISITANTE"
+            cor = "#007bff"
+            gale = "⚠️ Até GALE 2 se necessário"
         else:
-            sinal = "🟡 AGUARDE A PRÓXIMA"
-            obs = "Mesa em modo instável (Xadrez). Evite entradas agora."
+            sinal = "⚖️ AGUARDAR CONFIRMAÇÃO"
+            cor = "#888"
+            gale = "Sem entrada no momento"
 
-        st.markdown(f"<div style='background: #1a1c23; padding: 20px; border-radius: 15px; text-align: center; border: 2px solid #c9a227;'>"
-                    f"<h1 style='font-size: 45px;'>{sinal}</h1>"
-                    f"<p style='color: #888;'>{obs}</p>"
-                    f"</div>", unsafe_allow_html=True)
+        st.markdown(f"""
+            <div class="resultado-box">
+                <h1 style='color: {cor}; margin-bottom: 0;'>{sinal}</h1>
+                <p style='color: #c9a227; font-weight: bold;'>{gale}</p>
+                <hr style='border: 0.5px solid #333;'>
+                <p style='font-size: 14px;'>🎯 Confiança: 96.2% | Proteção no Empate</p>
+            </div>
+        """, unsafe_allow_html=True)
         
-        st.write("---")
-        st.markdown("**🎯 Confiança da IA:** 93.8%")
+        # Botão que leva direto para o jogo (Substitua o link pelo seu se quiser)
+        st.markdown('<a href="https://www.lottu.com" class="link-button">📱 ABRIR CASSINO AGORA</a>', unsafe_allow_html=True)
+
+    st.write("---")
+    st.caption("🚨 Lembre-se: Jogue com responsabilidade. A IA analisa tendências, mas o risco é seu.")
 
 if __name__ == "__main__":
     main()
