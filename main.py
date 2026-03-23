@@ -51,10 +51,16 @@ def train_model(data):
 
 def main():
     st.title('Football AI Predictor')
+    
+    # Coloque a sua chave entre as aspas abaixo
+    api_key = "SUA_CHAVE_AQUI"
+    league_id = "71"
+    
     data = collect_data()
     explore_data(data)
     model, accuracy = train_model(data)
     st.write('Model Accuracy:', accuracy)
-
-if __name__ == '__main__':
-    main()
+    
+    # Se a chave estiver presente, o app tentará carregar os jogos reais
+    if api_key != b8c288ff23ca4b2480f5d479176fc61f
+        st.success("API configurada com sucesso! A carregar jogos do Brasileirão...")
