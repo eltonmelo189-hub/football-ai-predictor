@@ -4,13 +4,13 @@ from datetime import datetime, timedelta
 
 st.set_page_config(page_title="Predator Neural Studio", layout="centered")
 
-# Estilo Premium Dark Gold (Ajustado conforme seus prints)
+# CSS Premium (Baseado nos seus prints recentes)
 st.markdown("""
     <style>
     .stApp { background-color: #0b0e14; color: white; }
     .status-card { 
-        background: #1a1c23; padding: 25px; border-radius: 15px; 
-        border: 2px solid #c9a227; text-align: center; margin-top: 10px;
+        background: #1a1c23; padding: 20px; border-radius: 15px; 
+        border: 2px solid #c9a227; text-align: center;
     }
     .banca-box {
         background: #252932; padding: 15px; border-radius: 10px;
@@ -23,70 +23,76 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# Inicialização de Variáveis de Sessão
+# Inicialização de Variáveis
 if 'greens' not in st.session_state: st.session_state.greens = 0
 if 'reds' not in st.session_state: st.session_state.reds = 0
 
 def main():
     st.markdown("<h1 style='text-align: center; color: #c9a227;'>🏆 PREDATOR NEURAL STUDIO</h1>", unsafe_allow_html=True)
     
-    # --- SIDEBAR: GESTÃO E HORÁRIOS ---
+    # Sidebar: Gestão, Horários e Metas
     agora = datetime.now()
     st.sidebar.markdown(f"### 🕒 Hora Atual: {agora.strftime('%H:%M')}")
     st.sidebar.markdown("---")
     
     st.sidebar.subheader("💰 Gestão de Banca")
-    banca_total = st.sidebar.number_input("Saldo Total (R$):", min_value=0.0, value=100.0, step=10.0)
-    percentual = st.sidebar.slider("Risco por entrada %", 1, 5, 2)
+    banca_total = st.sidebar.number_input("Saldo (R$):", value=100.0)
+    meta_lucro = st.sidebar.number_input("Meta de Lucro (R$):", value=20.0)
+    stop_loss = st.sidebar.number_input("Stop Loss (R$):", value=10.0)
     
+    percentual = st.sidebar.slider("Risco por entrada %", 1, 5, 2)
     valor_entrada = banca_total * (percentual / 100)
-    valor_empate = valor_entrada * 0.10
+    
+    lucro_atual = (st.session_state.greens * valor_entrada) - (st.session_state.reds * valor_entrada)
 
     st.sidebar.markdown(f"""
         <div class="banca-box">
-            <small>Aposta na Cor:</small><br><b>R$ {valor_entrada:.2f}</b><br>
-            <small>Proteção Empate:</small><br><b>R$ {valor_empate:.2f}</b>
+            <small>Resultado Atual:</small><br><b>R$ {lucro_atual:.2f}</b><br>
+            <progress value="{max(0, lucro_atual)}" max="{meta_lucro}" style="width:100%;"></progress>
         </div>
     """, unsafe_allow_html=True)
 
-    # --- DASHBOARD DE PERFORMANCE ---
-    c1, c2 = st.columns(2)
-    c1.metric("✅ ACERTOS (GREEN)", st.session_state.greens)
-    c2.metric("❌ ERROS (RED)", st.session_state.reds)
+    # Monitor de Segurança
+    if lucro_atual >= meta_lucro:
+        st.balloons()
+        st.success("🎯 META ATINGIDA! Hora de sacar e descansar.")
+        st.stop()
+    elif lucro_atual <= -stop_loss:
+        st.error("⚠️ STOP LOSS ATINGIDO. Volte amanhã com a mente fria.")
+        st.stop()
 
-    st.markdown("---")
+    # Dashboard de Performance
+    c1, c2 = st.columns(2)
+    c1.metric("✅ GREENS", st.session_state.greens)
+    c2.metric("❌ REDS", st.session_state.reds)
+
     st.markdown("### 🔍 Alimentar Histórico (C ou V):")
     col1, col2, col3, col4 = st.columns(4)
-    r1 = col1.text_input("1º Ant.", "C").upper()
-    r2 = col2.text_input("2º Ant.", "V").upper()
-    r3 = col3.text_input("3º Ant.", "C").upper()
-    r4 = col4.text_input("4º Ant.", "V").upper()
+    r1 = col1.text_input("1º", "C").upper()
+    r2 = col2.text_input("2º", "V").upper()
+    r3 = col3.text_input("3º", "C").upper()
+    r4 = col4.text_input("4º", "V").upper()
 
-    # --- BOTÕES DE AÇÃO ---
     col_an, col_re = st.columns([3, 1])
-    
     if col_an.button("🔥 GERAR PREVISÃO NEURAL"):
-        with st.status("🧠 Analisando Padrões de Mesa...", expanded=False):
-            time.sleep(1.2)
+        with st.status("🧠 IA Calculando Ciclos...", expanded=False):
+            time.sleep(1)
         
-        # Lógica de Decisão Baseada em Padrões do Football Studio
-        if r1 == r2 == r3: # Quebra de sequência longa
-            sinal, cor, conf = f"ENTRAR NO {'VISITANTE' if r1 == 'C' else 'CASA'}", "#ff4b4b", "97%"
-            dica = "Detectada saturação. Probabilidade alta de inversão."
-        elif r1 != r2 and r2 != r3: # Padrão Xadrez
-            sinal, cor, conf = f"SEGUIR FLUXO {r1}", "#c9a227", "92%"
-            dica = "Mesa em modo alternância. Siga a última cor."
+        # Lógica de Análise (Exemplo de Padrão)
+        if r1 == r2 == r3:
+            sinal, cor, conf = f"ENTRAR NO {'VISITANTE' if r1 == 'C' else 'CASA'}", "#ff4b4b", 98
+        elif r1 != r2 and r2 != r3:
+            sinal, cor, conf = f"SEGUIR TENDÊNCIA {r1}", "#007bff", 91
         else:
-            sinal, cor, conf = "AGUARDAR NOVA RODADA", "#888", "--"
-            dica = "Padrão inconclusivo. Evite entradas de risco agora."
+            sinal, cor, conf = "AGUARDAR CONFIRMAÇÃO", "#888", 0
 
-        st.markdown(f"""
-            <div class="status-card">
-                <h2 style='color: {cor};'>{sinal}</h2>
-                <p style='color: #c9a227; font-weight: bold;'>Confiança: {conf}</p>
-                <p style='font-size: 14px;'>{dica}<br><b>⚠️ Cubra o Empate (11:1)</b></p>
-            </div>
-        """, unsafe_allow_html=True)
+        if conf > 0:
+            st.markdown(f"""
+                <div class="status-card">
+                    <h2 style='color: {cor};'>{sinal}</h2>
+                    <p style='color: #c9a227;'>Confiança: {conf}% | Aposta: R$ {valor_entrada:.2f}</p>
+                </div>
+            """, unsafe_allow_html=True)
 
     if col_re.button("🗑️ RESET"):
         st.session_state.greens = 0
