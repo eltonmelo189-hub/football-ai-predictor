@@ -1,4 +1,4 @@
-home_team,away_team,home_score,away_score,target_column
+home_team,away_team,home_score,away_score,'target_column'
 Palmeiras,Flamengo,1,0,1
 Santos,Corinthians,0,0,0
 Fortaleza,Ceara,2,1,1
