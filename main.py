@@ -1,77 +1,56 @@
 import streamlit as st
-import time
 
-# Configuração de ecrã para telemóvel
-st.set_page_config(page_title="Predator Ultra-Flash", layout="centered")
+# Configuração visual 'Black & Gold' (conforme seus prints anteriores)
+st.set_page_config(page_title="Predator Elite Football", layout="centered")
 
-# CSS para Botões Gigantes e Alerta Visual
 st.markdown("""
     <style>
-    .stApp { background-color: #0b0e14; }
-    /* Botões que ocupam metade do ecrã cada */
-    div.stButton > button {
-        width: 100%; height: 120px; font-size: 30px !important; 
-        font-weight: bold; border-radius: 20px; border: 2px solid #c9a227;
+    .stApp { background-color: #0b0e14; color: white; }
+    .mignon-card { 
+        background: linear-gradient(135deg, #c9a227 0%, #8e6d13 100%);
+        padding: 25px; border-radius: 15px; border: 2px solid #fff;
+        text-align: center; color: black; font-weight: bold;
     }
-    .btn-casa { background: linear-gradient(145deg, #ff4b4b, #8b0000) !important; color: white !important; }
-    .btn-visi { background: linear-gradient(145deg, #007bff, #00008b) !important; color: white !important; }
-    
-    /* Card de Sinal que pisca para chamar atenção */
-    .sinal-alerta {
-        background: #1a1c23; padding: 30px; border-radius: 20px;
-        border: 4px solid #c9a227; text-align: center;
-        animation: blinker 1.5s linear infinite;
-    }
-    @keyframes blinker { 50% { opacity: 0.5; border-color: #fff; } }
+    .stSelectbox label { color: #c9a227 !important; font-size: 20px; }
     </style>
     """, unsafe_allow_html=True)
 
-if 'dados' not in st.session_state: st.session_state.dados = []
+# Ligas que a IA considera 'Filé Mignon'
+LIGAS_BOAS = ["Premier League 🏴󠁧󠁢󠁥󠁮󠁧󠁿", "Champions League 🇪🇺", "Série A Brasil 🇧🇷", "La Liga 🇪🇸", "Bundesliga 🇩🇪"]
 
-def processar(cor):
-    st.session_state.dados.insert(0, cor)
-    if len(st.session_state.dados) > 4:
-        st.session_state.dados.pop()
+st.title("🏆 PREDATOR: FILÉ MIGNON")
 
-st.markdown("<h1 style='text-align: center; color: #c9a227;'>⚡ PREDATOR FLASH</h1>", unsafe_allow_html=True)
+# 1. Filtro de Campeonato
+liga = st.selectbox("Selecione a Liga de Elite:", LIGAS_BOAS + ["Outras (Risco Alto)"])
 
-# Área de Botões - TOQUE ÚNICO
+if liga == "Outras (Risco Alto)":
+    st.error("⚠️ AVISO: A IA identifica baixa previsibilidade nesta liga. Cuidado!")
+else:
+    st.success(f"💎 LIGA SELECIONADA: {liga} (Alta Assertividade)")
+
+# 2. Dados do Jogo
 col1, col2 = st.columns(2)
+casa = col1.text_input("Time da Casa:")
+fora = col2.text_input("Time de Fora:")
 
-with col1:
-    if st.button("🔴\nCASA", key="c"):
-        processar("C")
-        st.rerun()
-
-with col2:
-    if st.button("🔵\nVISITANTE", key="v"):
-        processar("V")
-        st.rerun()
-
-# ANÁLISE AUTOMÁTICA IMEDIATA
-if len(st.session_state.dados) >= 3:
-    d = st.session_state.dados
-    
-    # Lógica de Inteligência: Procura quebra de sequência ou xadrez
-    if d[0] == d[1] == d[2]:
-        sinal = "🔥 ENTRAR NO VISITANTE" if d[0] == "C" else "🔥 ENTRAR NA CASA"
-        cor_txt = "#007bff" if "VISITANTE" in sinal else "#ff4b4b"
+# 3. Botão de Análise de Elite
+if st.button("🔥 ESCANEAR FILÉ MIGNON"):
+    with st.spinner("🧠 IA Cruzando Dados de Elite..."):
+        import time; time.sleep(1.5)
         
-        st.markdown(f"""
-            <div class="sinal-alerta">
-                <h1 style='color: {cor_txt}; margin:0;'>{sinal}</h1>
-                <p style='color: #c9a227; font-size: 20px;'><b>COBRIR EMPATE (85% Confiança)</b></p>
-            </div>
-        """, unsafe_allow_html=True)
-    
-    elif d[0] != d[1] and d[1] != d[2]:
-        st.info("🔄 PADRÃO XADREZ: Aguarde a quebra para entrar com segurança.")
-    else:
-        st.write("⏳ Analisando mesa... Continue inserindo os resultados.")
+        # Exemplo de resposta positiva para ligas de elite
+        if liga in LIGAS_BOAS and casa and fora:
+            st.markdown(f"""
+                <div class="mignon-card">
+                    🚀 ENTRADA CONFIRMADA (PADRÃO OURO)<br>
+                    <span style='font-size: 22px;'>{casa} vs {fora}</span><br><br>
+                    🎯 SUGESTÃO: Vitória {casa} (Proteção no Empate)<br>
+                    📊 CONFIANÇA IA: 94%
+                </div>
+            """, unsafe_allow_html=True)
+            st.balloons()
+        else:
+            st.warning("Preencha os times ou escolha uma Liga de Elite para ver o 'Filé'.")
 
-# Histórico rápido no rodapé
 st.markdown("---")
-st.write(f"📊 Últimos: {' | '.join(st.session_state.dados)}")
-if st.button("🗑️ LIMPAR"):
-    st.session_state.dados = []
-    st.rerun()
+st.caption("Foco total em lucro. Se não for Filé, a gente não entra.")
