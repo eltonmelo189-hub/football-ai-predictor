@@ -6,11 +6,15 @@ import matplotlib.pyplot as plt
 try:
     df_all = pd.read_csv('data/football_data.csv')
     st.sidebar.header("Menu")
+    
     if not df_all.empty:
         c = st.sidebar.selectbox("Coluna:", options=df_all.columns)
         L = st.sidebar.selectbox("Liga:", ["Série A Brasil", "Premier League"])
-        df = df_all[df_all['liga'] == L] if 'liga' in df_all.columns else pd.DataFrame()
+        
+        df = df_all[df_all['liga'] == L]
+        
         st.title(f"⚽ Predator: {L}")
+        
         if df.empty:
             st.warning("Sem jogos.")
         else:
