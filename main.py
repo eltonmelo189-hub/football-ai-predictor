@@ -4,30 +4,19 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 try:
-    # Carregar dados
-    data = pd.read_csv('data/football_data.csv')
+    df_all = pd.read_csv('data/football_data.csv')
     st.sidebar.header("Menu")
-    
-    if not data.empty:
-        col = st.sidebar.selectbox("Análise:", options=data.columns)
-        liga = st.sidebar.selectbox("Liga:", ["Série A Brasil", "Premier League"])
-        
-        # Filtro
-        if 'liga' in data.columns:
-        df = data[data['liga'] == liga]
-        else:
-            df = pd.DataFrame()
-
-        st.title(f"⚽ Predator: {liga}")
-        
+    if not df_all.empty:
+        c = st.sidebar.selectbox("Coluna:", options=df_all.columns)
+        L = st.sidebar.selectbox("Liga:", ["Série A Brasil", "Premier League"])
+        df = df_all[df_all['liga'] == L] if 'liga' in df_all.columns else pd.DataFrame()
+        st.title(f"⚽ Predator: {L}")
         if df.empty:
-            st.warning("Sem jogos para esta liga no momento.")
+            st.warning("Sem jogos.")
         else:
             st.write(df)
-            # Gráfico
             fig, ax = plt.subplots()
-            sns.histplot(data=df, x=col, kde=True, ax=ax)
+            sns.histplot(data=df, x=c, kde=True, ax=ax)
             st.pyplot(fig)
 except Exception as e:
-st.error(f"Erro: {e}")
-8
+    st.error(f"Erro: {e}")
