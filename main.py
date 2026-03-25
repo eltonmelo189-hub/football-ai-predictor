@@ -14,7 +14,7 @@ try:
         
         # Filtro
         if 'liga' in data.columns:
-            df = data[data['liga'] == liga]
+        df = data[data['liga'] == liga]
         else:
             df = pd.DataFrame()
 
@@ -29,4 +29,5 @@ try:
             sns.histplot(data=df, x=col, kde=True, ax=ax)
             st.pyplot(fig)
 except Exception as e:
-    st.error(f"Erro: {e}")
+st.error(f"Erro: {e}")
+8
