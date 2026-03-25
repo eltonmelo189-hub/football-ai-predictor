@@ -8,19 +8,19 @@ st.set_page_config(page_title="Predator V2", layout="wide")
 
 try:
     # 1. Carregar os dados que você acabou de salvar
-    df = pd.read_csv('data/football_data.csv')
+    df = pd.read_csv ('data/football_data.csv')
     
     st.sidebar.header("📊 Painel de Controle")
     
     # 2. Filtro de Liga (Vai funcionar agora que a coluna existe!)
     if 'liga' in df.columns:
-        ligas = df['liga'].unique().tolist()
-        escolha = st.sidebar.selectbox("Escolha a Liga:", ["Todas"] + ligas)
+    ligas = df['liga'].unique().tolist()
+    escolha = st.sidebar.selectbox("Escolha a Liga:", ["Todas"] + ligas)
         if escolha != "Todas":
-            df = df[df['liga'] == escolha]
-            st.title(f"⚽ Predator: {escolha}")
+       df[...] = df[df['liga'] == escolha]
+        st.title(f"⚽ Predator: {escolha}")
         else:
-            st.title("⚽ Predator: Todos os Jogos")
+        st.title("⚽ Predator: Todos os Jogos")
     else:
         st.title("⚽ Predator: Geral")
 
