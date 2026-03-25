@@ -5,7 +5,8 @@ import matplotlib.pyplot as plt
 
 # 1. Carregamento dos Dados (Certifique-se que o caminho está correto)
 try:
-    data = pd.read_csv('seu_arquivo_de_jogos.csv') # ou sua função de API
+    data = pd.read_csv('data/football_data.csv')
+
     
     # 2. MENU LATERAL (Para evitar o erro de coluna inexistente)
     st.sidebar.header("Configurações da IA")
