@@ -21,13 +21,19 @@ try:
         liga_selecionada = st.sidebar.selectbox("Escolha a Liga:", ["Série A Brasil", "Premier League"])
         
         # Filtrar os dados baseados na escolha
-        jogos_filtrados = data[data['liga'] == liga_selecionada]
+        # Nota: O arquivo CSV precisa ter uma coluna chamada 'liga'
+        if 'liga' in data.columns:
+            jogos_filtrados = data[data['liga'] == liga_selecionada]
+        else:
+            jogos_filtrados = pd.DataFrame() # Cria tabela vazia se não achar a coluna
 
         # 4. EXIBIÇÃO DOS JOGOS
         st.title(f"⚽ Predator: {liga_selecionada}")
         
         if jogos_filtrados.empty:
             st.warning(f"Sem jogos de elite hoje para {liga_selecionada}. O filé mignon volta em breve!")
+            if 'liga' not in data.columns:
+                st.info("Dica: Não encontrei a coluna 'liga' no seu arquivo CSV. Verifique os nomes das colunas.")
         else:
             st.write(jogos_filtrados) 
             
