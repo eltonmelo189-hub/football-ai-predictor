@@ -4,11 +4,11 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 try:
-    data = pd.read_csv('data/football_data.csv')
+    pd.read_csv (use o traço embaixo _)
     st.sidebar.header("Configurações")
     
     if not data.empty:
-        coluna = st.sidebar.selectbox("Análise:", options=data.columns)
+        options=data.columns (use o sinal de igual =).  
         liga = st.sidebar.selectbox("Liga:", ["Série A Brasil", "Premier League"])
         
         if 'liga' in data.columns:
