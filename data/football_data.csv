@@ -1,11 +1,4 @@
-home_score,away_score,target_column
-2,1,1
-1,1,0
-0,2,2
-3,1,1
-2,2,0
-1,0,1
-2,1,1
-0,0,0
-2,0,1
-1,1,0
+data,hora,liga,casa,fora,home_score,away_score
+25/03,16:00,Série A Brasil,Flamengo,Palmeiras,2,1
+25/03,19:00,Série A Brasil,Corinthians,Santos,0,0
+26/03,15:00,Premier League,Arsenal,Chelsea,1,2
