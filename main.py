@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 
 # 1. Carregamento dos Dados
 try:
+    # O arquivo deve estar na pasta 'data' com este nome exato
     data = pd.read_csv('data/football_data.csv')
     
     # 2. MENU LATERAL
@@ -19,7 +20,7 @@ try:
         # 3. FILTRO DE LIGA
         liga_selecionada = st.sidebar.selectbox("Escolha a Liga:", ["Série A Brasil", "Premier League"])
         
-        # Filtrar os dados
+        # Filtrar os dados baseados na escolha
         jogos_filtrados = data[data['liga'] == liga_selecionada]
 
         # 4. EXIBIÇÃO DOS JOGOS
