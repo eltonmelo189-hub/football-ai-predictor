@@ -3,21 +3,34 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
+st.set_page_config(page_title="Predator - Palpites", layout="wide")
+
 try:
     df = pd.read_csv('data/football_data.csv')
-    st.title("predator v2")
+    st.title("⚽ predator: palpite automático")
     
-    if 'liga' in df.columns:
-        ligas = df['liga'].unique().tolist()
-        escolha = st.sidebar.selectbox("liga:", ["todas"] + ligas)
-        if escolha != "todas":
-            df = df[df['liga'] == escolha]
+    # Lógica do Palpite (O robô analisa os gols)
+    def calcular_palpite(row):
+        if row['home_score'] > row['away_score'] + 0.5:
+            return "✅ Casa Vence"
+        elif row['away_score'] > row['home_score'] + 0.5:
+            return "🚀 Fora Vence"
+        else:
+            return "🤝 Empate / Ambas"
 
-    st.subheader("jogos")
-    st.write(df)
+    # Cria a coluna de palpite na hora
+    df['PALPITE'] = df.apply(calcular_palpite, axis=1)
 
+    # Mostra a tabela com tudo: Data, Hora, Times e o Palpite do Robô
+    st.subheader("lista de jogos e dicas de hoje")
+    st.dataframe(df[['data', 'hora', 'casa', 'fora', 'PALPITE', 'liga']])
+
+    # Gráfico de tendência
+    st.divider()
+    st.subheader("📈 análise de força (gols)")
     fig, ax = plt.subplots()
-    sns.histplot(data=df, x="home_score", kde=True, ax=ax)
+    sns.barplot(data=df, x='casa', y='home_score', ax=ax, palette="Blues")
+    plt.xticks(rotation=45)
     st.pyplot(fig)
 
 except Exception as e:
