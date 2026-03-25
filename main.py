@@ -25,8 +25,10 @@ try:
         jogos_filtrados = data[data['liga'] == liga_selecionada]
 
         # 4. EXIBIÇÃO DOS JOGOS
-        st.title(f"⚽ Predator: {liga_selecionada}")
         
+        st.warning(f"Sem jogos de elite hoje para {liga_selecionada}. O filé mignon volta em breve!")
+
+
         if jogos_filtrados.empty:
             st.warning(f"Sem jogos de elite hoje para {liga_selecionada}. O filé mignon volta em breve!")
         else:
@@ -37,6 +39,7 @@ try:
             fig, ax = plt.subplots()
             sns.histplot(jogos_filtrados[coluna_alvo], kde=True, ax=ax)
             st.pyplot(fig)
+st.error(f"Erro ao carregar dados: {e}")
 
 except Exception as e:
     st.error(f"Erro ao carregar dados: {e}")
